@@ -10,4 +10,5 @@ Here are the steps:
 5. add an `input` to select a city
 6. get the weather report in French
 7. add radio buton to select the country
+9. display the weather icon http://openweathermap.org/weather-conditions
 8. send the country to openweathermap.org
