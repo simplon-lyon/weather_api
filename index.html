@@ -9,9 +9,11 @@
 </head>
 
 <body>
-    <form action="">
+    <form action="http://api.openweathermap.org/data/2.5/weather" method="GET">
+        <input type="hidden" value="2cc7d408f527de19889ec31f5c22aa33" name="APPID">
+        <input type="hidden" name="mode" value="html">
         <label for="cityInput">City:</label>
-        <input type="text" id="cityInput">
+        <input type="text" id="cityInput" name="q">
         <input type="submit" value="Get Weather" id="citySubmit">
     </form>
     <h1 id="city"></h1>
@@ -20,32 +22,40 @@
         "use strict";
         const appID = "2cc7d408f527de19889ec31f5c22aa33";
 
+        // Add an event on form submit.
         let submit = document.querySelector("#citySubmit");
         submit.addEventListener('click', function(e) {
             e.preventDefault();
 
+            // Get user input.
             let city = document.querySelector("#cityInput").value;
 
+            // Send a request to http://openweathermap.org.
             let xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = displayWeather;
+            xhr.onreadystatechange = displayWeatherCallback;
             xhr.open('GET', 'http://api.openweathermap.org/data/2.5/weather?q=' + city + '&APPID=' + appID, true);
             xhr.send(null);
         })
 
-        function displayWeather(event) {
+        // displayWeatherCallback displays response from http://openweathermap.org to the user.
+        function displayWeatherCallback(event) {
             // XMLHttpRequest.DONE === 4
-            if (this.readyState === XMLHttpRequest.DONE) {
-                if (this.status === 200) {
-                    console.log("Réponse reçu: " + this.responseText);
-                    let data = JSON.parse(this.responseText);
-                    let h1 = document.querySelector("#city");
-                    h1.textContent = data["name"];
-                    let p = document.querySelector("#weather");
-                    p.textContent = data['weather'][0]['main'];
-                } else {
-                    console.log("Status de la réponse: " + this.status);
-                }
+            if (this.readyState !== XMLHttpRequest.DONE) {
+                return;
             }
+            if (this.status !== 200) {
+                console.log("Status de la réponse: " + this.status);
+                return;
+            }
+            console.log("Réponse reçu: " + this.responseText);
+            // Transform data into a JS object.
+            let data = JSON.parse(this.responseText);
+
+            // Display data to user.
+            let h1 = document.querySelector("#city");
+            h1.textContent = data["name"];
+            let p = document.querySelector("#weather");
+            p.textContent = data['weather'][0]['main'];
         }
     </script>
 </body>
