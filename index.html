@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Weather API</title>
+</head>
+
+<body>
+    <form action="">
+        <label for="cityInput">City:</label>
+        <input type="text" id="cityInput">
+        <input type="submit" value="Get Weather" id="citySubmit">
+    </form>
+    <h1 id="city"></h1>
+    <p id="weather"></p>
+    <script>
+        "use strict";
+        const appID = "2cc7d408f527de19889ec31f5c22aa33";
+
+        let submit = document.querySelector("#citySubmit");
+        submit.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            let city = document.querySelector("#cityInput").value;
+
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = displayWeather;
+            xhr.open('GET', 'http://api.openweathermap.org/data/2.5/weather?q=' + city + '&APPID=' + appID, true);
+            xhr.send(null);
+        })
+
+        function displayWeather(event) {
+            // XMLHttpRequest.DONE === 4
+            if (this.readyState === XMLHttpRequest.DONE) {
+                if (this.status === 200) {
+                    console.log("Réponse reçu: " + this.responseText);
+                    let data = JSON.parse(this.responseText);
+                    let h1 = document.querySelector("#city");
+                    h1.textContent = data["name"];
+                    let p = document.querySelector("#weather");
+                    p.textContent = data['weather'][0]['main'];
+                } else {
+                    console.log("Status de la réponse: " + this.status);
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
