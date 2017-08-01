@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SupperDoggo</title>
+</head>
+
+<body>
+    <script>
+        "use strict";
+        fetch('https://dog.ceo/api/breed/shiba/images/random').then(function(request) {
+            // Get the data from dog.ceo and transform it as a JSON object.
+            return request.json();
+        }).then(function(json) {
+            // Get the JSON object and transform it into an image.
+            console.log(json);
+            let img = document.createElement('img');
+            img.src = json.message;
+            document.body.appendChild(img);
+        }).catch(function(error) {
+            // Catch any error that might occur.
+            console.error(error.message);
+        });
+    </script>
+</body>
+
+</html>
